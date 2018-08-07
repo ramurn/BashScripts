@@ -9,6 +9,7 @@
 #                         - Mapped function name for each check along with variables #
 #Version: 2.1 : 14Feb2018 - Added minor changes and 201.03 check on fnpamctrlval     #
 #Version: 2.2 : 13Mar2018 - Minute changes and enhanced Seg 1 and Seg 13.3 checks    # 
+#Version: 2.3 : 17Apl2018 - Set PATH variable                                        #
 #                                                                                    #
 ######################################################################################
 
