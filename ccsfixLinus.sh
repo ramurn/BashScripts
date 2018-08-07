@@ -1,10 +1,11 @@
 #!/bin/bash
 
 
-##########################################################
-#Author: raja.murugan@dxc.com                            #
-#Version: 1.0-11-Dec-2017-Initial Deployment             #
-##########################################################
+##############################################################################
+#Purpose: Remediate CCS error checks                                         #
+#Version: 1.0 : 11Dec2017 - Initial Deployment                               #
+#Version: 1.1 : 12Dec2017 - Introducded SSH reload option instead of restart #
+##############################################################################
 
 ##
 #This script remediates following checks in CCS
@@ -16,8 +17,6 @@
 #CHECK 6: 201.01.1.1.5 - File /etc/profile should have default UMASK = 027 (AON Linux V1.2)
 #CHECK 7: 201.10.2.2 - Log rotate for file /var/log/faillog is set to 5 weeks? (AON Linux V1.2)
 ##
-
-service=${1:-ssh}
 
 DATE=`date '+%F-%H%M'`
 DIR=/tmp/ccsfix.$DATE
@@ -36,6 +35,13 @@ BKPEXEC1=/etc/initscripts.bkp.ccsfix
 BKPEXEC2=/etc/rcscripts.bkp.ccsfix
 BKPUMASK=/etc/profile.bkp.ccsfix
 BKPLOGROTATE=/etc/logrotate.conf.bkp.ccsfix
+
+##Take backup of backup files if exists
+for file in $BKPHOME $BKPSSH $BKPSUDO $BKPSYS $BKPSYSLOADED $BKPEXEC1 $BKPEXEC2 $BKPUMASK $BKPLOGROTATE; do
+if [ -f ${file} ]; then cp -p ${file} ${file}.1; fi
+rm -f ${file} 2>/dev/null
+done
+
 
 CHK1=${DIR}/check.home
 CHK21=${DIR}/check.sshd_config
@@ -129,7 +135,9 @@ if [ -f ${CHK21} ] && [ `wc -l ${CHK21} | awk '{print $1}'` -eq 1 ]; then
                 sh ${TMPEXEC}
                 if [ `echo $?` -eq 0 ]; then
                         cat /etc/ssh/sshd_config | grep -w PermitRootLogin | grep -v ^# > ${RSLT21}
-                        echo "Seg 2.1: Root login disabled in config file. Service will be restart at end if not denied" >> ${LOG}
+                        echo "Seg 2.1: Root login disabled in config file. Reloading SSH service" >> ${LOG}
+                        service sshd reload >> ${LOG}
+                        echo "Seg 2.1: Reloading SSH service compelted" >> ${LOG}
                         echo "Seg 2.1: CHECKRESULT: MODIFIED : PermitRootLogin has been disabled by script" >> ${LOG}
                         touch ${CHKSSHSVC}
                 else
@@ -142,7 +150,9 @@ elif [ `wc -l ${CHK21} | awk '{print $1}'` -eq 0 ]; then
         cp -p /etc/ssh/sshd_config ${BKPSSH}
         echo "PermitRootLogin no" >> /etc/ssh/sshd_config
         touch ${CHKSSHSVC}
-        echo "Seg 2.1: Appended \"PermitRootLogin no\" to SSHD config file. Service will be restart at end if not denied" >> ${LOG}
+        echo "Seg 2.1: Appended \"PermitRootLogin no\" to SSHD config file. Reloading SSH service" >> ${LOG}
+        service sshd reload >> ${LOG}
+        echo "Seg 2.1: Reloading SSH service compelted" >> ${LOG}
         echo "Seg 2.1: CHECKRESULT: APPENDED : PermitRootLogin has beed disabled by script" >> ${LOG}
         cat /etc/ssh/sshd_config | grep -w PermitRootLogin | grep -v ^# > ${RSLT21}
 else
@@ -182,31 +192,6 @@ fi
 echo "CHECK 2: ENDS at `date`" >> ${LOG}
 echo " " >> ${LOG}
 sleep 1
-}
-
-
-fnsshsvc()
-{
-echo "Note: "
-
-if [ -f ${CHKSSHSVC} ]; then
-        echo "Restarting SSH service if it is not denied in script parameter" >> ${LOG}
-        if [ `echo $service` == ssh ]; then
-                echo "Restarting SSH service begins" >> ${LOG}
-                service sshd restart >> ${LOG}
-                echo "Restarting SSH service completed"
-                echo "Restarting SSH service completed" >> ${LOG}
-        elif [ `echo $service` == nossh ]; then
-                echo "Restarting SSH denied at script execution level. Hence skipped."
-                echo "Restarting SSH denied at script execution level. Hence skipped." >> ${LOG}
-        else
-                echo "Invalid parameter given. No action taken. Manual SSH restart needed"
-                echo "Invalid parameter given. No action taken. Manual SSH restart needed" >> ${LOG}
-        fi
-else
-        echo "No changes were made in SSH file. Hence SSH service restart not required"
-        echo "No changes were made in SSH file. Hence SSH service restart not required" >> ${LOG}
-fi
 }
 
 
@@ -469,9 +454,6 @@ echo " " >> ${LOG}
 sleep 1
 }
 
-
-####### main script ###########
-
 fnhome
 fnsshroot
 fnuveperm
@@ -494,7 +476,5 @@ echo " "
 echo "# Script Result: If you don't see ERROR here, then you are good"
 grep CHECKRESULT ${LOG}
 echo "################################################################################################################"
-
-fnsshsvc
-
 echo " "
+
