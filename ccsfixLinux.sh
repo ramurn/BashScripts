@@ -3,6 +3,7 @@
 
 ##########################################################
 #Author: raja.murugan@dxc.com                            #
+#Purpose: Remediate CCS error checks                     #
 #Version: 1.0-11-Dec-2017-Initial Deployment             #
 ##########################################################
 
