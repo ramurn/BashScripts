@@ -13,6 +13,10 @@
 #CHECK 2: 201.01.2.4 - Files /etc/ssh/sshd_config and /etc/sudoers should have the lines - PermitRootLogin no and Defaults syslog = local4 respectively (AON Linux V1.2)
 #CHECK 3: 201.01.2.4 - Permission for directory /etc, /usr, /var should be 555 or stricter (AON Linux V1.2)
 #CHECK 4: 201.05.2.13 - File /etc/sysctl.conf should have line - net.ipv4.conf.all.accept_redirects  =  0 & net.ipv4.icmp_echo_ignore_broadcasts  =  1 (AON Linux V1.2)
+#CHECK 5: 201.01.2.4 - Startup scripts has permission of 775 or stricter? (AON Linux V1.2)
+#CHECK 6: 201.01.1.1.5 - File /etc/profile should have default UMASK = 027 (AON Linux V1.2)
+#CHECK 7: 201.10.2.2 - Log rotate for file /var/log/faillog is set to 5 weeks? (AON Linux V1.2)
+##
 
 service=${1:-ssh}
 
