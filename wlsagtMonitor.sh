@@ -3,7 +3,7 @@
 ##Purpose: Monitor wlsagent. Script will start Wlsgent if not running. Report if duplicate process running. 
 ##DATE: 25-Jan-2017
 
-LOG=/u01/appl/wlsagent/wlsagent-script.log
+LOG=/app/data/wlsagent/wlsagent-script.log
 
 
 echo "ALERT: Script begins at `date`" >> $LOG
