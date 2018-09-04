@@ -30,10 +30,6 @@
 #CHECK 11: 201.02.1.9.1 - File /etc/pam.d/system-auth or /etc/pam.d/password-auth should have the line remember parameter
 #CHECK 12: 201.10.1.1 - File /etc/rsyslog.conf should have the lines for capturing login success or failure
 #CHECK 13: 201.10.1.1 - Files /etc/pam.d/system-auth or /etc/pam.d/password-auth should be compliant
-<<<<<<< HEAD
-#CHECK 14: 201.10.1.1 - Files /etc/syslog.conf should have the lines for info and authpriv
-=======
->>>>>>> ver2
 ##
 
 
@@ -53,10 +49,6 @@
 #CHECK 11: 201.02.1.9.1         - Function Name: fnpassremember
 #CHECK 12: 201.10.1.1           - Function Name: fnrsyslogincap
 #CHECK 13: 201.10.1.1           - Function Name: fnauthcomplaint
-<<<<<<< HEAD
-#CHECK 14: 201.10.1.1           - Function Name: fnsyslogauthpriv
-=======
->>>>>>> ver2
 
 DATE=`date '+%F-%H%M'`
 DIR=/tmp/ccsfix.$DATE
@@ -64,10 +56,6 @@ BDIR=/etc/ccsfix.$DATE
 TMPEXEC=/tmp/ccsfix.exec
 LOG=${BDIR}/ccsfixlog.out
 
-<<<<<<< HEAD
-#Cleaning up old files
-rm -rf ${DIR} ${TMPEXEC} 2>/dev/null
-=======
 #Setting env PATH: 
 export PATH=$PATH:/bin:/usr/bin:/sbin:/usr/sbin
 
@@ -77,7 +65,6 @@ TMPPAUTH=/tmp/password-auth.tmp
 
 #Cleaning up temporary files
 rm -rf ${DIR} ${TMPEXEC} ${TMPSAUTH} ${TMPPAUTH} 2>/dev/null
->>>>>>> ver2
 mkdir ${DIR} ${BDIR} ${BDIR}/pam.d-bkp 2>/dev/null
 rsync -a /etc/pam.d/* ${BDIR}/pam.d-bkp/
 
@@ -89,11 +76,7 @@ OAUTH=/etc/pam.d/other                  #fnpamauth
 PSSH=/etc/pam.d/sshd                    #fnpamctrlval
 PPASSWD=/etc/pam.d/passwd               #fnpamctrlval
 PAMSU=/etc/pam.d/su                     #fnpamctrlval
-<<<<<<< HEAD
-SYSLOG=/etc/syslog.conf                 #fnsyslogauthpriv
-=======
 SYSLOG=/etc/syslog.conf                 #fnrsyslogincap
->>>>>>> ver2
 RSYSLOG=/etc/rsyslog.conf               #fnrsyslogincap
 
 #Backup files
@@ -111,11 +94,7 @@ BKPSAUTH=${BDIR}/system-auth                            #fnpamauth, fnsyspass, f
 BKPPSSH=${BDIR}/pam-sshd                                #fnpamctrlval
 BKPPPASSWD=${BDIR}/pam-passwd                           #fnpamctrlval
 BKPPAMSU=${BDIR}/pam-su                                 #fnpamctrlval
-<<<<<<< HEAD
-BKPSYSLOG=${BDIR}/syslog.conf                           #fnsyslogauthpriv
-=======
 BKPSYSLOG=${BDIR}/syslog.conf                           #fnrsyslogincap
->>>>>>> ver2
 BKPRSYSLOG=${BDIR}/rsyslog.conf                         #fnrsyslogincap
 
 
@@ -180,11 +159,7 @@ echo "Seg $1: Backup of ${RSYSLOG} is already saved in ${BKPRSYSLOG}" >> ${LOG}
 fi
 }
 
-<<<<<<< HEAD
-#Declaration of main functions
-=======
 #Declaring sub functions
->>>>>>> ver2
 
 fnhome ()
 {
@@ -197,15 +172,9 @@ echo "CHECK 1: BEGINS at `date`" >> ${LOG}
 echo "Seg 1: Checking directories weaker than 750 under /home"
 echo "Seg 1: Checking directories weaker than 750 under /home" >> ${LOG}
 echo "Seg 1: Capturing permissions of /home before executing script" >> ${LOG}
-<<<<<<< HEAD
-ls -ltrd /home/* > ${BKPHOME}
-echo "Seg 1: Backup taken. Listing directories which meets the condition" >> ${LOG}
-find /home/* -maxdepth 0 -type d -perm -700 -not -perm 750 -not -perm 700 -exec ls -ld {} \; > ${CHK1}
-=======
 ls -ltrd /home/* > ${BKPHOME} 2>/dev/null
 echo "Seg 1: Backup taken. Listing directories which meets the condition" >> ${LOG}
 find /home/* -maxdepth 0 -type d -perm -700 -not -perm 750 -not -perm 700 -exec ls -ld {} \; > ${CHK1} 2>/dev/null
->>>>>>> ver2
 if [ -f ${CHK1} ] && [ -s ${CHK1} ]; then
         echo "Seg 1: Following files meets the condition" >> ${LOG}
         echo " " >> ${LOG}
@@ -215,11 +184,7 @@ if [ -f ${CHK1} ] && [ -s ${CHK1} ]; then
         cat ${CHK1} | awk '{print $NF}' | while read dir; do chmod 750 $dir; done
         if [ `echo $?` -eq 0 ]; then
                 echo "Seg 1: Changing permission on impacted directories - Completed" >> ${LOG}
-<<<<<<< HEAD
-                ls -ltrd /home/* > ${RSLT1}
-=======
                 ls -ltrd /home/* > ${RSLT1} 2>/dev/null
->>>>>>> ver2
                 echo "Seg 1: Output of /home after changing permission is saved in ${RSLT1}" >> ${LOG}
                 echo "Seg 1: CHECKRESULT: MODIFIED : Some directories in /home has been modifiled by script" >> ${LOG}
         else
@@ -229,11 +194,7 @@ if [ -f ${CHK1} ] && [ -s ${CHK1} ]; then
 else
         echo "Seg 1: None of the directory meets condition. NO CHANGES MADE" >> ${LOG}
         echo "Seg 1: CHECKRESULT: PASS : /home meets is already CCS complaint" >> ${LOG}
-<<<<<<< HEAD
-        ls -ltrd /home/* > ${RSLT1}
-=======
         ls -ltrd /home/* > ${RSLT1} 2>/dev/null
->>>>>>> ver2
 fi
 echo "CHECK 1: ENDS at `date`" >> ${LOG}
 echo " " >> ${LOG}
@@ -806,60 +767,34 @@ echo "Seg 10: Checking ${SAUTH} & ${PAUTH} for required parameters"
 echo "Seg 10: Checking ${SAUTH} & ${PAUTH} for required parameters" >> ${LOG}
 
 
-<<<<<<< HEAD
-grep password ${PAUTH}  | grep sufficient  | grep -q pam_unix.so || grep password ${SAUTH}  | grep sufficient  | grep nullok | grep -q pam_unix.so
-if [ `echo $?` -ne 0 ] ; then
-        echo "Seg 11: parameter not present in both files. Taking backup of $PAUTH" >> ${LOG}
-        fnbkppauth 11
-        awk 'FNR==NR{ if (/password/) p=NR; next} 1; FNR==p{ print "password    sufficient    pam_unix.so sha512 shadow  nullok try_first_pass use_authtok remember=7" }' ${PAUTH} ${PAUTH} > ${PAUTH}.tmp
-=======
 grep password ${PAUTH}  | grep sufficient  | grep -q pam_unix.so || grep password ${SAUTH}  | grep sufficient | grep -q pam_unix.so
 if [ `echo $?` -ne 0 ] ; then
         echo "Seg 11: parameter not present in both files. Taking backup of $PAUTH" >> ${LOG}
         fnbkppauth 11
         awk 'FNR==NR{ if (/password/) p=NR; next} 1; FNR==p{ print "password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=7" }' ${PAUTH} ${PAUTH} > ${PAUTH}.tmp
->>>>>>> ver2
         mv -f ${PAUTH}.tmp ${PAUTH}
         echo "Seg 11: CHECKRESULT: APPENDED: parameter added into ${PAUTH} file" >> ${LOG}
 else
         grep password ${PAUTH}  | grep sufficient  | grep -q pam_unix.so
         if [ `echo $?` -eq 0 ]; then
                 echo "Seg 11: Parameter found in $PAUTH. Checking all values" >> ${LOG}
-<<<<<<< HEAD
-                grep password ${PAUTH}  | grep sufficient  | grep pam_unix.so | grep sha512 | grep shadow | grep nullok | grep "try_first_pass use_authtok" | grep -q "remember=7"
-                if [ `echo $?` -eq 0 ]; then
-                        echo "Seg 11: CHECKRESULT: PASS : nullok & remember value for password is set to 7 already" >> ${LOG}
-                else
-                        fnbkppauth 11
-                        sed 's/^password\s*sufficient\s*pam_unix.so.*$/password    sufficient    pam_unix.so sha512 shadow  nullok try_first_pass use_authtok remember=7/' ${PAUTH} > ${PAUTH}.tmp
-=======
                 grep password ${PAUTH}  | grep sufficient  | grep pam_unix.so | grep sha512 | grep shadow | grep "try_first_pass use_authtok" | grep -q "remember=7"
                 if [ `echo $?` -eq 0 ]; then
                         echo "Seg 11: CHECKRESULT: PASS : Remember value for password is set to 7 already" >> ${LOG}
                 else
                         fnbkppauth 11
                         sed 's/^password\s*sufficient\s*pam_unix.so.*$/password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=7/' ${PAUTH} > ${PAUTH}.tmp
->>>>>>> ver2
                         mv -f ${PAUTH}.tmp ${PAUTH}
                         echo "Seg 11: CHECKRESULT: MODIFIED : ${PAUTH} modified to meet requirements" >> ${LOG}
                 fi
         else
                 echo "Seg 11: Parameter found in $SAUTH. Checking all values" >> ${LOG}
-<<<<<<< HEAD
-                grep password ${SAUTH}  | grep sufficient  | grep pam_unix.so | grep sha512 | grep shadow | grep nullok | grep "try_first_pass use_authtok" | grep -q "remember=7"
-                if [ `echo $?` -eq 0 ]; then
-                        echo "Seg 11: CHECKRESULT: PASS : nullok & remember value for password is set to 7 already" >> ${LOG}
-                else
-                        fnbkpsauth 11
-                        sed 's/^password\s*sufficient\s*pam_unix.so.*$/password    sufficient    pam_unix.so sha512 shadow  nullok try_first_pass use_authtok remember=7/' ${SAUTH} > ${SAUTH}.tmp
-=======
                 grep password ${SAUTH}  | grep sufficient  | grep pam_unix.so | grep sha512 | grep shadow | grep "try_first_pass use_authtok" | grep -q "remember=7"
                 if [ `echo $?` -eq 0 ]; then
                         echo "Seg 11: CHECKRESULT: PASS : Remember value for password is set to 7 already" >> ${LOG}
                 else
                         fnbkpsauth 11
                         sed 's/^password\s*sufficient\s*pam_unix.so.*$/password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=7/' ${SAUTH} > ${SAUTH}.tmp
->>>>>>> ver2
                         mv -f ${SAUTH}.tmp ${SAUTH}
                         echo "Seg 11: CHECKRESULT: MODIFIED : Different value. Alterted the value to requirement" >> ${LOG}
                 fi
@@ -871,39 +806,6 @@ fi
 fnrsyslogincap ()
 {
 ######################################################
-<<<<<<< HEAD
-#SEGMENT 12: File ${RSYSLOG} should capture all info #
-######################################################
-echo "CHECK 12: BEGINS at `date`" >> ${LOG}
-echo "Seg 12: Checking ${RSYSLOG} for required parameters"
-echo "Seg 12: Checking ${RSYSLOG} for required parameters" >> ${LOG}
-
-if [ -f ${SYSLOG} ]; then SYSFILE=${SYSLOG}
-elif [ -f ${RSYSLOG} ]; then SYSFILE=${RSYSLOG};
-else SYSFILE=${RSYSLOG}; fi
-
-if [ ! -f ${SYSFILE} ]; then
-        echo "Seg 12: CHECKRESULT: SKIP: There is no ${SYSFILE} file. Skipping this check" >> ${LOG}
-else
-        cat ${SYSFILE} | grep -v ^# | grep messages | grep debug | grep auth.none | grep authpriv.none | grep cron.none | grep mail.none | grep -q "*.info"
-        if [ `echo $?` -eq 0 ]; then
-                echo "Seg 12: CHECKRESULT: PASS : Requested parameter already existed in file" >> ${LOG}
-        else
-                echo "Seg 12: Required parameters doest not exists. Taking backup" >> ${LOG}
-                fnbkprsys 12
-                num=`grep -n "/var/log/messages" $SYSFILE | grep -v "#" | cut -d':' -f1`
-                sed -i "${num}s/.*/*.info,*.debug,auth.none,authpriv.none,cron.none,mail.none    -\/var\/log\/messages/" ${SYSFILE}
-                cat $SYSFILE | grep -v ^# | grep messages | grep debug | grep auth.none | grep authpriv.none | grep cron.none | grep mail.none | grep -q "*.info"
-                if [ `echo $?` -eq 0 ]; then
-                        echo "Seg 12: CHECKRESULT: MODIFIED : Rsyslog has been modifiled to meet requirements" >> ${LOG}
-                else
-                        echo "Seg 12: CHECKRESULT: Something is wrong. CHECK MANUALLY" >> ${LOG}
-                                                echo "Seg 12: Reverted the original file from Backup. No changes made" >> ${LOG}
-                                                file=`echo $SYSFILE | cut -d/ -f3`
-                                                cp -p ${BDIR}/$file ${SYSFILE}
-                fi
-        fi
-=======
 #SEGMENT 12: Syslog/Rsyslog should capture all info  #
 ######################################################
 echo "CHECK 12: BEGINS at `date`" >> ${LOG}
@@ -960,7 +862,6 @@ else
 		fi
 		
 		
->>>>>>> ver2
 fi
 }
 
@@ -1052,23 +953,15 @@ else
         grep ^auth $PAUTH | grep required | grep pam_tally2.so | grep -v ^# | grep -q "deny="
         if [ `echo $?` -eq 0 ]; then
                 num=`grep -n ^auth $PAUTH | grep required | grep pam_tally2.so | grep -v ^# | grep "deny=" | cut -d: -f1`
-<<<<<<< HEAD
-                sed -i "${num}s/\(auth\s*required\s*pam_tally.so\s*deny\).*$/auth        required      pam_tally2.so deny=5/" $PAUTH
-=======
                 cp -p $PAUTH $TMPPAUTH
 				sed -i '4s/.*deny=//p' $TMPPAUTH
 				tval=`sed -n '4p' /tmp/system-auth.tmp | awk '{print substr($0,0,1)}'`
 				sed -i "${num}s/deny=${tval}/deny=5/" $PAUTH
->>>>>>> ver2
                 echo "Seg 13.${count}: CHECKRESULT: MODIFIED: deny=5 for pam_tally2 has been replaced to $PAUTH" >> ${LOG}
         else
                 awk 'FNR==NR{ if (/auth/) p=NR; next} 1; FNR==p{ print "auth        required      pam_tally2.so deny=5" }' ${PAUTH} ${PAUTH} > ${PAUTH}.tmp
                 mv -f ${PAUTH}.tmp ${PAUTH}
-<<<<<<< HEAD
-                echo "Seg 13.${count}: CHECKRESULT: MODIFIED: deny=5 for pam_tally2 has been appended to $PAUTH" >> ${LOG}
-=======
                 echo "Seg 13.${count}: CHECKRESULT: APPENDED: deny=5 for pam_tally2 has been appended to $PAUTH" >> ${LOG}
->>>>>>> ver2
         fi
 fi
 }
@@ -1083,23 +976,15 @@ else
         grep ^auth $SAUTH | grep required | grep pam_tally2.so | grep -v ^# | grep -q "deny="
         if [ `echo $?` -eq 0 ]; then
                 num=`grep -n ^auth $SAUTH | grep required | grep pam_tally2.so | grep -v ^# | grep "deny=" | cut -d: -f1`
-<<<<<<< HEAD
-                sed -i "${num}s/\(auth\s*required\s*pam_tally.so\s*deny\).*$/auth        required      pam_tally2.so deny=5/" $SAUTH
-=======
 				cp -p $SAUTH $TMPSAUTH
 				sed -i '4s/.*deny=//p' $TMPSAUTH
 				tval=`sed -n '4p' /tmp/system-auth.tmp | awk '{print substr($0,0,1)}'`
 				sed -i "${num}s/deny=${tval}/deny=5/" $SAUTH
->>>>>>> ver2
                 echo "Seg 13.${count}: CHECKRESULT: MODIFIED: deny=5 for pam_tally2 has been replaced to $SAUTH" >> ${LOG}
         else
                 awk 'FNR==NR{ if (/auth/) p=NR; next} 1; FNR==p{ print "auth        required      pam_tally2.so deny=5" }' ${SAUTH} ${SAUTH} > ${SAUTH}.tmp
                 mv -f ${SAUTH}.tmp ${SAUTH}
-<<<<<<< HEAD
-                echo "Seg 13.${count}: CHECKRESULT: MODIFIED: deny=5 for pam_tally2 has been appended to $SAUTH" >> ${LOG}
-=======
                 echo "Seg 13.${count}: CHECKRESULT: APPENDED: deny=5 for pam_tally2 has been appended to $SAUTH" >> ${LOG}
->>>>>>> ver2
         fi
 fi
 }
@@ -1138,41 +1023,6 @@ count=$((count+1))
 
 
 
-<<<<<<< HEAD
-fnsyslogauthpriv ()
-{
-######################################################
-#SEGMENT 14: File ${SYSLOG} should capture all info #
-######################################################
-echo "CHECK 14: BEGINS at `date`" >> ${LOG}
-echo "Seg 14: Checking ${SYSLOG} for required parameters"
-echo "Seg 14: Checking ${SYSLOG} for required parameters" >> ${LOG}
-
-SYSFILE=${SYSLOG}
-
-if [ ! -f ${SYSFILE} ]; then
-        echo "Seg 14: CHECKRESULT: SKIP: There is no ${SYSFILE} file. Skipping this check" >> ${LOG}
-else
-        cat ${SYSFILE} | grep -v ^# | grep messages | grep debug | grep auth.none | grep authpriv.none | grep cron.none | grep mail.none | grep -q "*.info"
-        if [ `echo $?` -eq 0 ]; then
-                echo "Seg 14: CHECKRESULT: PASS : Requested parameter already existed in file" >> ${LOG}
-        else
-                echo "Seg 14: Required parameters doest not exists. Taking backup" >> ${LOG}
-                fnbkpsyslog 14
-                num=`grep -n "/var/log/messages" $SYSFILE | grep -v ^# | cut -d':' -f1`
-                sed -i "${num}s/.*/*.debug;auth.none;authpriv.none;cron.none;mail.none;*.info    -\/var\/log\/messages/" ${SYSFILE}
-                cat $SYSFILE | grep -v ^# | grep messages | grep debug | grep auth.none | grep authpriv.none | grep cron.none | grep mail.none | grep -q "*.info"
-                if [ `echo $?` -eq 0 ]; then
-                        echo "Seg 14: CHECKRESULT: MODIFIED : Rsyslog has been modifiled to meet requirements" >> ${LOG}
-                else
-                        echo "Seg 14: CHECKRESULT: Something is wrong. CHECK MANUALLY" >> ${LOG}
-                fi
-        fi
-fi
-}
-
-=======
->>>>>>> ver2
 
 ## Main Script Begins Here
 
@@ -1200,11 +1050,7 @@ else
         echo "Seg 13: Checking of $PAUTH & $SAUTH has required parameter for fnauthcomplaint"
         echo "Seg 13: CHECKRESULT: SKIP: This is not RHEL 6. Hence skipping check for fnauthcomplaint" >> ${LOG}
 fi
-<<<<<<< HEAD
-fnsyslogauthpriv
-=======
 
->>>>>>> ver2
 
 echo " "
 echo "CCSFIX script execution completed. Below is the summary of the run."
