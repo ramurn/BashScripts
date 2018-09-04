@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+#Added in Ve2 Branch
 ######################################################################################
 #Purpose: Remediate CCS error checks                                                 #
 #Version: 1.0 : 11Dec2017 - Initial Deployment                                       #
@@ -14,7 +14,7 @@
 ######################################################################################
 
 ##
-#This script remediates following checks in CCS
+#This script ######remediates following checks in CCS
 #CHECK 01: 201.01.1.1.5 - User home directories should have 750 or stricter permission (AON Linux V1.2)
 #CHECK 02: 201.01.2.4 - Files /etc/ssh/sshd_config and /etc/sudoers should have the lines - PermitRootLogin no and Defaults syslog = local4 respectively (AON Linux V1.2)
 #CHECK 03: 201.01.2.4 - Permission for directory /etc, /usr, /var should be 555 or stricter (AON Linux V1.2)
