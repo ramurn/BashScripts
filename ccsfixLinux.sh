@@ -2,10 +2,8 @@
 
 
 ######################################################################################
-#Author: raja.murugan@dxc.com                                                        #
 #Purpose: Remediate CCS error checks                                                 #
 #Version: 1.0 : 11Dec2017 - Initial Deployment                                       #
-#Version: 1.1 : 12Dec2017 - Introduced SSH reload option instead of restart          #
 #Version: 2.0 : 16Jan2018 - More checks added (Check 8 till 14 )                     #
 #                         - Mapped function name for each check along with variables #
 #Version: 2.1 : 14Feb2018 - Added minor changes and 201.03 check on fnpamctrlval     #
@@ -16,13 +14,13 @@
 
 ##
 #This script remediates following checks in CCS
-#CHECK 01: 201.01.1.1.5 - User home directories should have 750 or stricter permission (AON Linux V1.2)
-#CHECK 02: 201.01.2.4 - Files /etc/ssh/sshd_config and /etc/sudoers should have the lines - PermitRootLogin no and Defaults syslog = local4 respectively (AON Linux V1.2)
-#CHECK 03: 201.01.2.4 - Permission for directory /etc, /usr, /var should be 555 or stricter (AON Linux V1.2)
-#CHECK 04: 201.05.2.13 - File /etc/sysctl.conf should have line - net.ipv4.conf.all.accept_redirects  =  0 & net.ipv4.icmp_echo_ignore_broadcasts  =  1 (AON Linux V1.2)
-#CHECK 05: 201.01.2.4 - Startup scripts has permission of 775 or stricter? (AON Linux V1.2)
-#CHECK 06: 201.01.1.1.5 - File /etc/profile should have default UMASK = 027 (AON Linux V1.2)
-#CHECK 07: 201.10.2.2 - Log rotate for file /var/log/faillog is set to 5 weeks? (AON Linux V1.2)
+#CHECK 01: 201.01.1.1.5 - User home directories should have 750 or stricter permission ( Linux V1.2)
+#CHECK 02: 201.01.2.4 - Files /etc/ssh/sshd_config and /etc/sudoers should have the lines - PermitRootLogin no and Defaults syslog = local4 respectively ( Linux V1.2)
+#CHECK 03: 201.01.2.4 - Permission for directory /etc, /usr, /var should be 555 or stricter ( Linux V1.2)
+#CHECK 04: 201.05.2.13 - File /etc/sysctl.conf should have line - net.ipv4.conf.all.accept_redirects  =  0 & net.ipv4.icmp_echo_ignore_broadcasts  =  1 ( Linux V1.2)
+#CHECK 05: 201.01.2.4 - Startup scripts has permission of 775 or stricter? ( Linux V1.2)
+#CHECK 06: 201.01.1.1.5 - File /etc/profile should have default UMASK = 027 ( Linux V1.2)
+#CHECK 07: 201.10.2.2 - Log rotate for file /var/log/faillog is set to 5 weeks? ( Linux V1.2)
 #CHECK 08: 201.01.2.4 - File /etc/pam.d/password-auth and /etc/pam.d/system-auth should have the lines for auth required and account required
 #CHECK 09: 201.02.1.5 - Pam authentication files should have the lines for password control values
 #		   201.03     - File /etc/pam.d/passwd or /etc/pam.d/system-auth should be compliant
