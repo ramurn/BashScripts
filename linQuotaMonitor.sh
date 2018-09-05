@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Custom made script to check the disk quota used by particular user. 
-#This scipt was executed added in NagiosXI to capture the exit code and take action as per the exit code
+#This scipt is intended to be added in NagiosXI to capture the exit code and take action as per the exit code
 #Exit states are OK (0), WARN (1) and CRIT (2)
 
 TFILE=/tmp/val
