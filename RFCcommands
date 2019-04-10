@@ -1,1 +1,2 @@
+#!/bin/bash
 service sshd status
