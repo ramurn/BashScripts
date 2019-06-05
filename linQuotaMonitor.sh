@@ -16,10 +16,12 @@ echo "`quota ${USER} | sed -n '4p' | awk '{print $1}'` * 512 /1024/1024" | bc > 
 echo -e "OK: \c"; echo -e "Current Utilization quota of ${USER}: `cat ${TFILE}` MB";
 exit 0
 elif (( ${CHECK} < 90 ));
+#NEW LINE MODIFILE to check merge conflit
 then
 echo "`quota ${USER} | sed -n '4p' | awk '{print $1}'` * 512 /1024/1024" | bc > ${TFILE}
 echo -e "WARN: \c"; echo -e "Current Utilization quota of ${USER}: `cat ${TFILE}` MB";
 exit 1
+#Additionale LIne
 else
 echo "`quota ${USER} | sed -n '4p' | awk '{print $1}'` * 512 /1024/1024" | bc > ${TFILE}
 echo -e "CRIT: \c"; echo -e "Current Utilization quota of ${USER}: `cat ${TFILE}` MB";
