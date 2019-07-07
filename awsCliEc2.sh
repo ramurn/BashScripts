@@ -6,9 +6,10 @@
 
 # Version Information
 # 1.0 : Initial script to start/stop/report EC2 instances based on Usage TAG
-# 1.1 : Added Terminate and Deploy functions
+# 1.1 : Added Terminate/Deploy/Mail functions
 
 USAGE=$2
+MAILLIST="your-username@domain.com"
 PATH=$PATH:/Library/Frameworks/Python.framework/Versions/3.7/bin
 
 fn_helpMain()
@@ -24,6 +25,7 @@ echo "<script> start <usage-key>         # Start EC2 instances using TAG";
 echo "<script> stop <usage-key>          # Stop EC2 instaces using TAG";
 echo "<script> terminate <usage-key>     # Terminate EC2 instances using TAG";
 echo "<script> report [<usage-key>]      # Report EC2 instaces for ALL or TAGed instances";
+echo "<sript> mail [<usage-key>]         # Email EC2 Report detials to maillist"
 echo "<script> deploy                    # Deploy EC2 instances in interactive mode";
 echo " ";
 }
@@ -74,6 +76,11 @@ else
 fi
 }
 
+fn_mailReport()
+{
+    fn_reportInst | mail -s "AWS Instance IP Address" ${MAILLIST}
+}
+
 fn_deployInst()
 {
 echo " ";
@@ -97,5 +104,6 @@ stop) fn_stopInst;;
 terminate) fn_termInst;;
 report) fn_reportInst;;
 deploy) fn_deployInst;;
+mail) fn_mailReport;;
 *)fn_helpMain; exit 1;;
 esac
