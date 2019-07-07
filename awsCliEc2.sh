@@ -1,13 +1,15 @@
 #!/bin/bash
 
 #Author: Raja T
-#Usage: Refer help ;)
-#Version: 1.0
+#Usage: To control AWS instances based in USAGE tag
+#Version: 1.1 # July 07 2019
 
 # Version Information
 # 1.0 : Initial script to start/stop/report EC2 instances based on Usage TAG
+# 1.1 : Added Terminate and Deploy functions
 
 USAGE=$2
+PATH=$PATH:/Library/Frameworks/Python.framework/Versions/3.7/bin
 
 fn_helpMain()
 {
